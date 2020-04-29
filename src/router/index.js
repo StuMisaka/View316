@@ -39,7 +39,7 @@ const router = new Router({
       //首页
       path:'/home',
       meta:{
-        requireAuth: false
+        requireAuth: true
       },
       component:home
     }
