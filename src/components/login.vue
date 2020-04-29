@@ -3,43 +3,40 @@
     <form>
       <p>
         <label>用户名</label><br>
-        <input type="text" name="username" minlength="2" maxlength="8" :class="inputBorder[0]" v-model="user.username">
+        <input type="text" name="username" minlength="2" maxlength="8" :class="inputBorder[0]" v-model="user.username" @keydown.enter="doLogin">
         <label class="tip" :class="isTip[0]">请输入用户名哦</label>
       </p>
       <p>
         <label>密码</label><br>
-        <input type="password" name="password" maxlength="16" minlength="6" class="input-password" :class="inputBorder[1]" v-model="user.password">
+        <input type="password" name="password" maxlength="16" minlength="6" class="input-password" :class="inputBorder[1]" v-model="user.password" @keydown.enter="doLogin">
         <label class="tip" :class="isTip[1]">喵，还没有输入密码呢</label>
       </p>
       <button :class="buttonColor" type="button" @click="doLogin">
         登录
       </button>      
     </form>
+    <tip v-if="isPop" :img=imgError content='用户名或密码错误哦'></tip>
     <footer>
 
     </footer>
-    <transition name='fade'>
-      <div class='pop-up' v-if='isPop'>
-        <img src="../assets/error.png" alt="">
-        用户名或密码错误哦
-      </div>
-
     
-    </transition>
-   
-
   </div>
 </template>
 
 <script>
+import tip from './tip.vue'
 export default {
   name:'login',
+  components:{
+    tip
+  },
   data() {
     return {
       user:{
         username:'',
         password:''
       },
+      imgError:require('../assets/error.png'),
       isPop:false,
       isTip:["tip-hidden","tip-hidden"],
       buttonColor:'button-before-color',
@@ -50,9 +47,10 @@ export default {
     doLogin(){
       this.changeButtonColor();
       if(this.checkInput()){
-        this.axios.post('/login',JSON.stringify(this.user))
+        this.axios.post('/login',JSON.stringify(this.user),{
+          headers:{'Content-Type': 'application/json;charset=UTF-8'}
+        })
         .then(res => {
-          window.console.log(res);
           if(res.data.success){
             this.$store.commit('SET_TOKEN',res.data.data);
             this.$store.commit('SET_USER',this.user.username);
@@ -60,6 +58,8 @@ export default {
           }
           else{
             this.popError();
+            this.$store.commit('LOGOUT');
+            
           }
         })
         .catch(err => {
@@ -191,24 +191,5 @@ export default {
   background-color: #FF4040;
 }
 
-.pop-up{
-  display: flex;
-  position: fixed;
-  flex: row nowrap;
-  width: 280px;
-  height: 50px;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  border-radius: 5px;
-  box-shadow: 0 0 2px #f4f5f6;
-  background: #f4f5f6;
-}
-
-.pop-up img{
-  width: 25px;
-  height: 25px;
-  margin-right: 15px;
-}
 
 </style>
