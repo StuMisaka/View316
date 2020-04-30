@@ -54,12 +54,12 @@ export default {
           if(res.data.success){
             this.$store.commit('SET_TOKEN',res.data.data);
             this.$store.commit('SET_USER',this.user.username);
+            this.getData();
             this.$router.push('./home');
           }
           else{
             this.popError();
             this.$store.commit('LOGOUT');
-            
           }
         })
         .catch(err => {
@@ -67,6 +67,16 @@ export default {
         });
 
       }
+    },
+    getData(){
+      this.axios.get('./pictures')
+      .then(res => {
+        this.$store.commit('SET_SUM',res.data.data.length);
+        this.$store.commit('SET_IMAGES',res.data.data);
+      })
+      .catch(err => {
+        window.console.log(err);
+      })
     },
     changeButtonColor(){
       this.buttonColor = "button-after-color";
