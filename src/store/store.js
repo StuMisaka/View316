@@ -7,8 +7,8 @@ const store = new Vuex.Store({
   state:{
     username:window.localStorage.getItem('username'),
     token:window.localStorage.getItem('token'),
-    sum:0,
-    images:[]
+    sum:window.localStorage.getItem('sum'),
+    images:JSON.parse(window.localStorage.getItem('images'))
   },
   mutations:{
     SET_TOKEN:(state,data) => {
@@ -19,6 +19,14 @@ const store = new Vuex.Store({
       state.username = data;
       window.localStorage.setItem('username',data);
     },
+    SET_SUM:(state,data) => {
+      state.sum = data;
+      window.localStorage.setItem('sum',data);
+    },
+    SET_IMAGES:(state,data) => {
+      state.images = JSON.parse(data);
+      window.localStorage.setItem('images',data);
+    },
     LOGOUT:(state) => {
       state.token = null;
       state.username = null;
@@ -26,12 +34,8 @@ const store = new Vuex.Store({
       state.images = [];
       window.localStorage.removeItem('token');
       window.localStorage.removeItem('username');
-    },
-    SET_SUM:(state,data) => {
-      state.sum = data;
-    },
-    SET_IMAGES:(state,data) => {
-      state.images = data;
+      window.localStorage.removeItem('sum');
+      window.localStorage.removeItem('images');
     }
   },
   actions:{
