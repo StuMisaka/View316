@@ -11,7 +11,7 @@
     </div>
     <button type="button" class="submit" @click='doUpload'>开始上传</button>
     <img src="../assets/close.png" alt="" class="close" @click='doClose'>
-    <tip :img=imgSuccess  content='上传成功！'></tip>
+    <tip :img=imgSuccess  content='上传成功' v-if="isPop"></tip>
   </div>
 </template>
 
@@ -26,6 +26,7 @@ export default {
   data() {
     return {
       isPreview:false,
+      isPop:false,
       file:null,
       imgbase64:null,
       valOfInput:"",
@@ -54,20 +55,21 @@ export default {
     doUpload(){
       let params = new FormData();
       params.append('file',this.file,this.file.name);
-      this.axios.post('./pictures',params,{
-        headers:{}
-      })
+      this.axios.post('./pictures',params)
       .then(res => {
         this.cancelFile();
+        this.popSuccess();
         window.console.log(res);
       })
       .catch(err => {
         window.console.log(err);
       })
-
     },
-    test(event){
-      window.console.log(event);
+    popSuccess(){
+      this.isPop = true;
+      window.setTimeout(() => {
+        this.isPop = false;        
+      }, 800);
     }
   },
 }
