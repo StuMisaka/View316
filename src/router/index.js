@@ -11,6 +11,11 @@ Vue.use(Router)
 const router = new Router({
   routes: [
     {
+      path:'/',
+      redirect:'/login'
+
+    },
+    {
       //登录
       path:'/login',    
       meta:{
