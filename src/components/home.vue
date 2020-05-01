@@ -22,34 +22,57 @@
         <img src="../assets/search.png" alt="">
       </div>
       <div class="swiper">
-        <img :src="imgUrl[0]" alt="" >
+        <img  :src=imgurl alt="" >
+      </div>
+      <div class="info">
+        <div>
+          {{this.index + 1}} / {{ this.$store.state.sum }}
+        </div>
+        <div>
+          {{ this.$store.state.images[this.index].origin_name }}
+        </div>
       </div>
       <div class="control">
         <button type="button"  @click="doOpenupload"><img src="../assets/upload.png" alt="上传"></button>
-        <button><img src="../assets/left.png" alt="向右"></button>
-        <button><img src="../assets/right.png" alt="向左"></button>
-        <button><img src="../assets/refresh.png" alt="刷新"> </button>
-        <button><img src="../assets/delete.png" alt="删除"></button>
+        <button type="button" @click='doLast'><img src="../assets/left.png" alt="向右"></button>
+        <button type="button" @click="doNext"><img src="../assets/right.png" alt="向左" ></button>
+        <button type="button" @click="doRefresh"><img src="../assets/refresh.png" alt="刷新"> </button>
+        <button type="button" @click="doDelete"><img src="../assets/delete.png" alt="删除"></button>
       </div>
       <transition name="fade">
         <upload class="upload" v-if="popUpload" @close-upload='doClose'></upload>
       </transition>
+      <transition name="fade">
+        <tip v-if="isPop" :img=imgSuccess  content='删除成功'></tip>
+      </transition>
     </main>
-
   </div>
 </template>
 
 <script>
+import tip from './tip.vue'
 import upload from './upload.vue'
 export default {
   name: 'home',
   components: {
-    upload
+    upload,
+    tip
   },
   data() {
     return {
-      username:this.$store.state.username,   
-      popUpload:false
+      username:this.$store.state.username,
+      index:0,
+      popUpload:false,
+      isPop:false,
+      imgSuccess:require('../assets/success.png')
+    }
+  },
+  computed: {
+    imgurl(){
+      return this.$store.state.images[this.index].url
+    },
+    imgname(){
+      return this.$store.state.images[this.index].origin_name
     }
   },
   methods: {
@@ -69,7 +92,6 @@ export default {
       const a = Math.random();
       if(a > 0.5){
         window.open("https://github.com/StuMisaka");
-
       }
       else{
         window.open("https://github.com/WillXu24");
@@ -82,28 +104,52 @@ export default {
     doClose(){
       this.popUpload = false;
     },
-    getImages(){
-      this.axios.get('./pictures')
-      .then(res => {
-        this.$store.commit('SET_SUM',res.data.data.length);
-        this.$store.commit('SET_IMAGES',res.data.data);
+    doLast(){
+      if(this.index == 0){
+        this.index = this.$store.state.sum - 1;
+      }
+      else{
+        this.index -= 1;
+      }
+    },
+    doNext(){
+      if(this.index == (this.$store.state.sum -1)){
+        this.index = 0;
+      }
+      else{
+        this.index += 1;
+      }
+
+    },
+    doDelete(){
+      let url = './pictures/' + this.$store.state.images[this.index].upload_name
+      this.axios.delete(url)
+      .then(() => {
+        this.$store.commit('DELETE',this.index);
+        this.index -= 1;
+        this.isPop = true;
+        window.setTimeout(() => {
+          this.isPop = false;
+        }, 800);
       })
       .catch(err => {
         window.console.log(err);
       })
     },
-  },
-  computed: {
-    imgUrl(){
-      let arrUrl = [];
-      for( let i in this.$store.state.images){
-        arrUrl[i] ="http://49.234.136.73:5050/images/" + this.$store.state.images[i].upload_name;
-      }
-      return arrUrl;
+    doRefresh(){
+      this.axios.get('./pictures')
+      .then(res => {
+        this.$store.commit('SET_SUM',res.data.data.length);
+        for (let i in res.data.data){
+          res.data.data[i].url = "http://49.234.136.73:5050/images/" + res.data.data[i].upload_name;
+        }
+        this.$store.commit('SET_IMAGES',JSON.stringify(res.data.data));
+        window.console.log("更新成功");
+      })
+      .catch(err => {
+        window.console.log(err);
+      })
     }
-  },
-  mounted() {
-    this.getImages();
   },
 }
 </script>
@@ -249,6 +295,15 @@ main{
   max-height: 50vh;
   min-width: 20vw;
   min-height: 20vh;
+}
+
+.info{
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  color: rgb(28,28,28);
 }
 
 .control{

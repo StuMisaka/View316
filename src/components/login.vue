@@ -55,7 +55,6 @@ export default {
             this.$store.commit('SET_TOKEN',res.data.data);
             this.$store.commit('SET_USER',this.user.username);
             this.getData();
-            this.$router.push('./home');
           }
           else{
             this.popError();
@@ -72,7 +71,11 @@ export default {
       this.axios.get('./pictures')
       .then(res => {
         this.$store.commit('SET_SUM',res.data.data.length);
-        this.$store.commit('SET_IMAGES',res.data.data);
+        for (let i in res.data.data){
+          res.data.data[i].url = "http://49.234.136.73:5050/images/" + res.data.data[i].upload_name;
+        }
+        this.$store.commit('SET_IMAGES',JSON.stringify(res.data.data));
+        this.$router.push('./home');
       })
       .catch(err => {
         window.console.log(err);
