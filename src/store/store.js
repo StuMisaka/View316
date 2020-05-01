@@ -27,6 +27,12 @@ const store = new Vuex.Store({
       state.images = JSON.parse(data);
       window.localStorage.setItem('images',data);
     },
+    DELETE:(state,index) => {
+      state.images.splice(index,1);
+      state.sum -= 1;
+      window.localStorage.setItem('sum',state.sum);
+      window.localStorage.setItem('images',JSON.stringify(state.images));
+    },
     LOGOUT:(state) => {
       state.token = null;
       state.username = null;
