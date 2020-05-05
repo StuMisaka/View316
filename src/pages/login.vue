@@ -25,6 +25,7 @@
 
 <script>
 import tip from '../components/tip.vue'
+import config from '../../public/config/config.json'
 export default {
   name:'login',
   components:{
@@ -72,7 +73,7 @@ export default {
       .then(res => {
         this.$store.commit('SET_SUM',res.data.data.length);
         for (let i in res.data.data){
-          res.data.data[i].url = "http://49.234.136.73:5050/images/" + res.data.data[i].upload_name;
+          res.data.data[i].url = config.baseURL + "/images/" + res.data.data[i].upload_name;
         }
         this.$store.commit('SET_IMAGES',JSON.stringify(res.data.data));
         this.$router.push('./home');
