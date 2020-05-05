@@ -5,7 +5,7 @@ import VueAxios from 'vue-axios'
 
 Vue.use(VueAxios, axios)
 
-axios.defaults.baseURL = "http://49.234.136.73:5050";
+axios.defaults.baseURL = baseURL; // eslint-disable-line no-undef
 
 
 axios.interceptors.request.use(

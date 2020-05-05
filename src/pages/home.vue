@@ -69,7 +69,7 @@ export default {
   },
   computed: {
     imgurl(){
-      return "http://49.234.136.73:5050" + this.$store.state.images[this.index].url
+      return baseURL + this.$store.state.images[this.index].url // eslint-disable-line no-undef
     },
     imgname(){
       return this.$store.state.images[this.index].origin_name
