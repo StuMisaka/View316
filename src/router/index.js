@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../store/store.js'
-import login from '../components/login.vue'
-import register from '../components/register.vue'
-import phoneHome from '../components/phoneHome.vue'
-import home from '../components/home.vue'
+
+import login from '../pages/login.vue'
+import register from '../pages/register.vue'
+import phoneHome from '../pages/phoneHome.vue'
+import home from '../pages/home.vue'
 
 Vue.use(Router)
 
