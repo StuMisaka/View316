@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import tip from './tip.vue'
+import tip from '../components/tip.vue'
 export default {
   name:'login',
   components:{

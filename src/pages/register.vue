@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="register">
     <form action="" class="form">
       <p>
         <label>用户名</label><br>
@@ -10,7 +10,7 @@
         <input type="password" name="password" maxlength="16" minlength="6" class="input">
       </p>
       <button class="button">
-        登录
+        注册
       </button>
       
     </form>
@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style scoped>
-.login{
+.register{
   display: flex;
   flex-flow: row nowrap;
   width: 100vw;
@@ -38,32 +38,33 @@ export default {
   background-color: #f4f5f6;
 }
 
-.login form{
+.register form{
   display: flex;
   flex-flow: column nowrap;
   width: 280px;
-  height: 500px;
+  height: 400px;
   padding: 60px;
   background-color: white;
   border-radius: 2px;
   box-shadow: 0 0 25px #CDC9C9;
 }
 
-.login form label{
+.register form label{
   font-size: 15px;
   color: #8B8989;
 }
 
-.login form input{
+.register form input{
   width: 280px;
   height: 35px;
   background-color: #f4f5f6;
   outline: none;
   border:1px solid #f4f5f6;
   box-shadow:inset 0 0 2px #CDC9C9;
+  font-size: 20px;
 }
 
-.login form button{
+.register form button{
   margin-top: 50px;
   width:  280px;
   height: 40px;

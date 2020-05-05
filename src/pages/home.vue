@@ -50,8 +50,8 @@
 </template>
 
 <script>
-import tip from './tip.vue'
-import upload from './upload.vue'
+import tip from '../components/tip.vue'
+import upload from '../components/upload.vue'
 export default {
   name: 'home',
   components: {
