@@ -18,17 +18,18 @@
     </header>
     <main>
       <search class="search" @sendIndex="changeImage"></search>
-      <div class="swiper">
-        <img  :src=imgurl alt="" >
+      <div class="swiper" v-if="!isEmpty">
+        <img :src=imgurl alt="" >
       </div>
-      <div class="info">
+      <div class="info" v-if="!isEmpty">
         <div>
           {{this.index + 1}} / {{ this.$store.state.sum }}
         </div>
         <div>
-          {{ this.$store.state.images[this.index].origin_name }}
+          {{ this.imgname }}
         </div>
       </div>
+      <empty v-if="isEmpty"></empty>
       <div class="control">
         <button type="button"  @click="doOpenupload"><img src="../assets/upload.png" alt="上传"></button>
         <button type="button" @click='doLast'><img src="../assets/left.png" alt="向右"></button>
@@ -50,10 +51,12 @@
 import tip from '../components/tip.vue'
 import upload from '../components/upload.vue'
 import search from '../components/search.vue'
+import empty from '../components/empty.vue'
 export default {
   name: 'home',
   components: {
     search,
+    empty,
     upload,
     tip
   },
@@ -68,10 +71,30 @@ export default {
   },
   computed: {
     imgurl(){
-      return baseURL + this.$store.state.images[this.index].url // eslint-disable-line no-undef
+      if(this.$store.state.images[this.index]){
+        return baseURL + this.$store.state.images[this.index].url // eslint-disable-line no-undef
+      }
+      else{
+        return false
+      }
     },
     imgname(){
-      return this.$store.state.images[this.index].origin_name
+      if(this.$store.state.images[this.index]){
+        return this.$store.state.images[this.index].origin_name 
+      }
+      else{
+        window.console.log(this.index);
+        return false
+      }
+    },
+    isEmpty(){
+      if(this.$store.state.sum > 0){
+        return false
+      }
+      else{
+        return true
+      }
+
     }
   },
   methods: {
@@ -94,7 +117,6 @@ export default {
       }
       else{
         window.open("https://github.com/WillXu24");
-
       }
     },
     doOpenupload(){
@@ -125,7 +147,9 @@ export default {
       this.axios.delete(url)
       .then(() => {
         this.$store.commit('DELETE',this.index);
-        this.index -= 1;
+        if(this.index > 0){
+          this.index -= 1;
+        }
         this.isPop = true;
         window.setTimeout(() => {
           this.isPop = false;
@@ -142,8 +166,7 @@ export default {
         for (let i in res.data.data){
           res.data.data[i].url = "/images/" + res.data.data[i].upload_name;
         }
-        this.$store.commit('SET_IMAGES',JSON.stringify(res.data.data));
-        window.console.log("更新成功");
+        this.$store.commit('SET_IMAGES',JSON.stringify(res.data.data))
       })
       .catch(err => {
         window.console.log(err);

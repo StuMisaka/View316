@@ -18,6 +18,7 @@ export default {
       for(let i = 0;i <= this.$store.state.images.length;i++){
         if(this.$store.state.images[i]){
           if(this.searchKey == this.$store.state.images[i].origin_name){
+            this.searchKey = "";
             this.$emit("sendIndex",i);
           }
         }
