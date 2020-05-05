@@ -17,10 +17,7 @@
       </ul>
     </header>
     <main>
-      <div class="search">
-        <input type="text" name="" id="">
-        <img src="../assets/search.png" alt="">
-      </div>
+      <search class="search" @sendIndex="changeImage"></search>
       <div class="swiper">
         <img  :src=imgurl alt="" >
       </div>
@@ -52,9 +49,11 @@
 <script>
 import tip from '../components/tip.vue'
 import upload from '../components/upload.vue'
+import search from '../components/search.vue'
 export default {
   name: 'home',
   components: {
+    search,
     upload,
     tip
   },
@@ -149,6 +148,9 @@ export default {
       .catch(err => {
         window.console.log(err);
       })
+    },
+    changeImage(index){
+      this.index = index;
     }
   },
 }

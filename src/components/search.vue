@@ -1,13 +1,29 @@
 <template>
 <div class='search'>
-  <input type="text" name="" id="">
-  <img src="../assets/search.png" alt="">
+  <input type="text" name="" id="" v-model="searchKey">
+  <img src="../assets/search.png" alt="" @click="doSearch">
 </div>
 </template>
 
 <script>
 export default {
-  name:'search'
+  name:'search',
+  data() {
+    return {
+      searchKey:""
+    }
+  },
+  methods: {
+    doSearch(){
+      for(let i = 0;i <= this.$store.state.images.length;i++){
+        if(this.$store.state.images[i]){
+          if(this.searchKey == this.$store.state.images[i].origin_name){
+            this.$emit("sendIndex",i);
+          }
+        }
+      }
+    }
+  },
   
 }
 </script>
