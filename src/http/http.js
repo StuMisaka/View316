@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import config from '../../public/config/config.json'
+
 
 Vue.use(VueAxios, axios)
 
-axios.defaults.baseURL = 'http://49.234.136.73:5050';
+axios.defaults.baseURL = config.baseURL;
 
 
 axios.interceptors.request.use(
